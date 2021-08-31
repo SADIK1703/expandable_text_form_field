@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/dropdown_text_form_field/BuildConfig.java
+ com.example.dropdown_text_form_field.BuildConfig
