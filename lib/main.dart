@@ -19,9 +19,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  bool isFocused = false;
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  bool isFocused = false;
   List<String> filteredTexts = [
     'Sakarya',
     'Ankara',
@@ -36,14 +42,8 @@ class MyHomePage extends StatefulWidget {
     'Ankara yildirim Bayezit Universitesi',
     'Canakkale On Sekiz Mart Universitesi',
   ];
-
   final TextEditingController textEditingController = TextEditingController();
 
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
@@ -69,25 +69,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               border: Border.all(color: Colors.red),
               borderRadius: BorderRadius.circular(12),
             ),
-            height: widget.isFocused ? 150 : 50,
+            height: isFocused ? 150 : 50,
             width: MediaQuery.of(context).size.width * .9,
             duration: Duration(milliseconds: 50),
             child: Column(
               children: [
                 TextFormField(
                   decoration: InputDecoration(),
-                  controller: widget.textEditingController,
+                  controller: textEditingController,
                   onTap: () {
                     setState(
                       () {
-                        widget.isFocused = true;
+                        isFocused = true;
                       },
                     );
                   },
                   onChanged: (value) => setState(() => setFilteredTexts(value)),
                 ),
                 Expanded(
-                  child: widget.filteredTexts.isEmpty
+                  child: filteredTexts.isEmpty
                       ? Center(
                           child: Text('Bulunamadi'),
                         )
@@ -97,18 +97,18 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                             itemBuilder: (context, index) => GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  widget.isFocused = false;
+                                  isFocused = false;
                                 });
                               },
                               child: SizedBox(
                                 height: 20,
                                 child: Center(
-                                  child: Text(widget.filteredTexts[index]),
+                                  child: Text(filteredTexts[index]),
                                 ),
                               ),
                             ),
                             separatorBuilder: (context, index) => Divider(),
-                            itemCount: widget.filteredTexts.length,
+                            itemCount: filteredTexts.length,
                           ),
                         ),
                 ),
@@ -122,8 +122,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   void setFilteredTexts(String entireText) {
     List<String> result = [];
-    result.addAll(widget.texts.where((element) => element.toLowerCase().startsWith(entireText.toLowerCase())));
-    result.addAll(widget.texts.where((element) => element.toLowerCase().contains(entireText.toLowerCase())));
-    widget.filteredTexts = result.toSet().toList();
+    result.addAll(texts.where((element) => element.toLowerCase().startsWith(entireText.toLowerCase())));
+    result.addAll(texts.where((element) => element.toLowerCase().contains(entireText.toLowerCase())));
+    filteredTexts = result.toSet().toList();
   }
 }
